@@ -81,17 +81,11 @@
 ; hasta n
 
 (define
-  (pre-intervalo n)
-  (cond [(zero? n) empty]
-        [else (cons n (pre-intervalo (sub1 n)))]))
-
-(define
   (intervalo n)
-  (reverse (pre-intervalo n))
-  )
-
+  (cond [(zero? n) empty]
+        [else (cons n (intervalo (sub1 n)))]))
 ; DONDE PONER EL REVERSE DENTRO DE LA FUNCIÓN
-(intervalo 4);!!!!!!!
+;(intervalo 4);!!!!!!!
 
 ; Ejercicio 7
 ; factnat: Natural -> Natural
