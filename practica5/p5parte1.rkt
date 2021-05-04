@@ -136,6 +136,64 @@ programas.|#
                        #true
                        (uno-verdadero (rest l)))]))
 
+; Ejercicio 13
+
+#|Diseñe una función cortas que tome una lista de strings y devuelva una
+lista con aquellas palabras de longitud menor a 5.|#
+
+; longitud: List -> Number
+; longitud toma una lista y devuelve su cantidad de elementos
+
+#|(check-expect (longitud '()) 0)
+(check-expect (longitud (list 1 2 3 4)) 4)
+(check-expect (longitud (list "hola")) 1)
+(check-expect (longitud (list (list 1) (list "a"))) 2)
+(check-expect (longitud (list '())) 1)|#
+
+(define
+  (longitud l)
+  (cond [(empty? l) 0]
+        [(cons? l) (add1 (longitud (rest l)))]
+        [else "Error de tipo"]
+        ))
+
+
+; Representanos palabras con strings
+; corta? : String -> Bool
+; corta? toma una string y devuelve #true si su longitud es menor a 5 y false si no es así
+(check-expect (corta? "") #t)
+(check-expect (corta? "hola") #t)
+(check-expect (corta? "corta") #f)
+
+(define
+  (corta? s)
+  (< (string-length s) 5)
+  )
+
+; Representamos palabras con strings
+; cortas: List(String) -> List(String)
+; La función cortas toma una lista de strings y nos devuelve
+; otra con aquellas strings con longitud menor a 5
+
+(check-expect (cortas (list "soy" "corta" "o" "no" "holiss")) (list "soy" "o" "no") )
+(check-expect (cortas '()) '())
+(check-expect (cortas (list "somos" "todas" "palabras" "largas")) '())
+(check-expect (cortas (list "so" "mos" "to" "das" "cor" "tas")) (list "so" "mos" "to" "das" "cor" "tas"))
+
+(define
+  (cortas l)
+  (cond [(empty? l) '()]
+        [(cons? l)
+         (if (corta? (first l))
+             (cons (first l) (cortas (rest l)))
+             (cortas (rest l)))
+         ]
+        )
+  )
+
+
+
+
 ; Ejercicio 17
 
 (check-expect (eliminar (list 1 2 3 2 7 6) 2) (list 1 3 7 6))
