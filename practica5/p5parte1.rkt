@@ -144,11 +144,11 @@ lista con aquellas palabras de longitud menor a 5.|#
 ; longitud: List -> Number
 ; longitud toma una lista y devuelve su cantidad de elementos
 
-#|(check-expect (longitud '()) 0)
+(check-expect (longitud '()) 0)
 (check-expect (longitud (list 1 2 3 4)) 4)
 (check-expect (longitud (list "hola")) 1)
 (check-expect (longitud (list (list 1) (list "a"))) 2)
-(check-expect (longitud (list '())) 1)|#
+(check-expect (longitud (list '())) 1)
 
 (define
   (longitud l)
@@ -168,6 +168,19 @@ lista con aquellas palabras de longitud menor a 5.|#
 (define
   (corta? s)
   (< (string-length s) 5)
+  )
+
+; Podriamos chequear además que sea una palabra
+
+; Si yo tuviese una lista vimos que es muuy facil saber si un elemento está ahí
+(check-expect (espalabra? "hola") #t)
+(check-expect (espalabra? "") #t)
+(check-expect (espalabra? "dos palabras") #f)
+(string->list "dos palabras")
+
+(define
+  (espalabra? s)
+  (false? (member? #\space (string->list s)))
   )
 
 ; Representamos palabras con strings
