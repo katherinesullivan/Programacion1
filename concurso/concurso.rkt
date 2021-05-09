@@ -6,6 +6,14 @@
 #|Diseñe una función cortas que tome una lista de strings y devuelva una
 lista con aquellas _palabras_ de longitud menor a 5.|#
 
+Antes de empezar:
+
+- todos los elementos son palabras?
+- si hay elementos que contienen más de una palabra:
+- debo agregar la string en sí si esta tiene longitud menor a 5?
+- debo agregar las palabras dentro de la string si estas tienen longitud menor a 5? -> ahora vemos
+- no debo agregar nada de una string con mas de una palabra?
+
 #|
 
 Bueno,
