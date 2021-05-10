@@ -1,20 +1,5 @@
-;; The first three lines of this file were inserted by DrRacket. They record metadata
-;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-intermediate-reader.ss" "lang")((modname concurso) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
-; Ejercicio 13 - Práctica 5, parte 1
-
-#|Diseñe una función cortas que tome una lista de strings y devuelva una
-lista con aquellas _palabras_ de longitud menor a 5.|#
-
-#|Antes de empezar:
-
-- todos los elementos son palabras?
-- si hay elementos que contienen más de una palabra:
-- debo agregar la string en sí si esta tiene longitud menor a 5?
-- debo agregar las palabras dentro de la string si estas tienen longitud menor a 5? -> ahora vemos
-- no debo agregar nada de una string con mas de una palabra?|#
-
-#|
+Antes de empezar les quería consultar sobre cómo entender la consigna, porque dependiendo de eso cambia lo que tendrñia que hacer. La funcion dice que dada una lista de strings os devuelve una lista con las _palabras_ de long menor a 5 
+pero eso significaria que...
 
 Bueno,
 
@@ -78,12 +63,30 @@ pero, la pregumta ahora es ¿como vamos a ir guardando esos elementos en una lis
 
 un abordaje logico puede ser:
 una vez que tengo un elemento que cumple la condicion hago uso del constructor cons para agregarlo a una
-lista formada por todos los elementos que cumplan la condición que vengan después de él en la lista.
+lista formada por todos los otros elementos de la lista original que cumplen la condición.
 
-Por lo que dijimos antes sé como ir accediendo al segundo elemento de la lista y luego al tercero cuarto etc -> mediante rest
-y casualmente una función que me permite encontrar los strings cuya longitud sea menor a 5 en el rest de la lista es
-la misma función que estamos definiendo (esto pq rest nos devuelve una lista). Vamos a usar recursión es decir,
+es decir quiero hacer cons (first l) 
+(lista formada por los elementos con longitud < 5 de l sin tener en cuenta al first)
+
+sin tener en cuenta first lo podemos reemplazar por
+rest l
+
+y que funcion dada una lista nos devuelve los elementos con longitud menor a 5 -> la misma funcion que estamos definiendo
+
+Vamos a usar recursión es decir,
 la función se va a llamar a sí misma.
+
+Veamos que esta idea en teoria funcionaria
+
+llamo por primera vez a la funcion tomo el primer elemento de la lista y verifico y veo si lo agrego o no (en caso de no agregarlo lo que estariamos haciendo es simplemente devolver la funcion aplicada a rest l) 
+
+Cdo llamo otra vez a la funcion al tomar el first de la lista pasada estoy verificando en base al 2do elemento de la lista original y asi sucesivamente 
+
+asi que en definitiva estamos haciendo lo que nos planteamos en un principio ir recorriendo elemento por elemento la lista verificando y agregando a los que cumplen la condicion a una nueva lista
+
+Segun tiempo ahora solo nos falta ver el caso base -> empty -> esto
+
+o --------------------------------------
 
 Entonces, ahí estaríamos bastante cerca de terminar de definir nuestra función: 
 lo que vamos a hacer es
@@ -123,7 +126,7 @@ escribimos simplemente
 (define
 (cortas l)
 (cond [(empty? l) '()]
-      [if (long-menor-a-5 (first l))
+      [else if (long-menor-a-5 (first l))
            (cons (first l) (cortas l))
            (cortas l)])
 )
@@ -176,86 +179,3 @@ Corta como dijimos toma una lista, llamemosla l
 (define
 (corta l)
 )
-
-
-
-
-
-|#
-
-(string-length "")
-
-; corta? : String -> Bool
-; dado un string me va a devolver #true si este tiene longitud menor a 5 y el string consta de una sola
-; palabra y #false en caso contrario
-
-(check-expect (pal-corta? "palabra") #f)
-(check-expect (pal-corta? "hey") #t)
-(check-expect (pal-corta? "") #t)
-(check-expect (pal-corta? "a a") #f)
-
-(define
-  (pal-corta? s)
-  (and (< (string-length s) 5) (false? (member? #\space (string->list s))))
-  )
-
-; aclarar que los que tengan mas de una palabra no va
-
-
-; cortas: List(String) -> List(String)
-; dada una lista de strings devuelve una lista con aquellas palabras con longitud menor a 5
-
-(check-expect (cortas '()) '())
-(check-expect (cortas (list "holas" "queeee" "tallll")) '())
-(check-expect (cortas (list "hola" "antiparras" "comunismo")) (list "hola"))
-(check-expect (cortas (list "hola" "que" "tal")) (list "hola" "que" "tal"))
-(check-expect (cortas 5) "Tipo de dato ingresado inválido")
-(check-expect (cortas (list "oh f" "rayo" "australia")) (list "rayo"))
-
-(define
-  (cortas l)
-  (cond [(empty? l) '()]
-        [(cons? l) (if (pal-corta? (first l))
-                   (cons (first l) (cortas (rest l)))
-                   (cortas (rest l)))]
-        [else "Tipo de dato ingresado inválido"]
-        )
-  )
-
-; aclarar lo de filter
-
-(require racket/string)
-
-(define
-  (mas-de-una-palabra l)
-  (cond [(empty? l) '()]
-        [else (if (< (string-length (first l)) 5)
-             (cons (first l) (mas-de-una-palabra (rest l)))
-             (mas-de-una-palabra (rest l)))]
-        )
-  )
-
-
-(define
-  (verificador-cond l)
-  (let ([elem (first l)])
-  (cond [(string=? (first (string-split elem)) elem) ; solo tiene una palabra la string
-         (if (< (string-length elem) 5)
-             (cons elem (cortas2.0 (rest l)))
-             (cortas2.0 (rest l)))] 
-        [else (append (mas-de-una-palabra (string-split elem)) (cortas2.0 (rest l)))] ; tiene más de una palabra
-        )
-    )
-  )
-
-
-(check-expect (cortas2.0 (list "hola qué tal" "todo espectacular" "jaja" "excelente")) (list "hola" "qué" "tal" "todo" "jaja"))
-(check-expect (cortas2.0 '()) '())
-(check-expect (cortas2.0 (list "merecidamente glorioso" "australopithecus" "palabra" "hola")) (list "hola"))
-
-(define
-  (cortas2.0 l)
-  (cond [(empty? l) '()]
-        [else (verificador-cond l)]
-        )
-  )
